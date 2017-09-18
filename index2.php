@@ -9,6 +9,13 @@
 		insert_second($id,$value,$second);
 	}
 	else{
+		$avg=get_avg();
+		echo "average is $avg";
+		clear_second($id);
+		$minute=check_minute();
+		if ($minute<=59){
+			insert_minute($id,$avg,$minute);
+		}
 
 	}
 ?>

@@ -16,4 +16,39 @@ function insert_second($id,$value,$second2){
 		echo ('inserted second value');
 	}
 }
+function clear_second($id){
+	require('config.php');
+	$delete="DELETE FROM minute WHERE id=$id";  
+	if($dbcon->query($delete))  
+	{  
+		echo ('Cleared second table');
+	}
+}
+function get_avg(){
+	require('config.php');
+	$query="SELECT AVG(value) from minute";//select query for viewing users.  
+	$run=mysqli_query($dbcon,$query);//here run the sql query.  
+	$second=mysqli_fetch_array($run);
+	$avg=$second[0];
+	return $avg;
+}
+function check_minute(){
+	require('config.php');
+	$query="SELECT minute from hour order by minute desc limit 1";  
+	$run=mysqli_query($dbcon,$query); 
+	$minute2=0; 
+	$minute=mysqli_fetch_array($run);
+	$minute2=$minute[0]+1;
+	return $minute2;
+}
+function insert_minute($id,$value,$minute){
+	require('config.php');
+	$insert="insert into hour (id, value,minute) VALUE ('$id','$value','$minute')";  
+	if($dbcon->query($insert))  
+	{  
+		echo ('inserted minute value');
+	}
+}
+
+
 ?>
