@@ -1,46 +1,45 @@
 <?php
-$page = $_SERVER['PHP_SELF'];
-$sec = "1";
-?>
-<html>
-    <head>
-    <meta http-equiv="refresh" content="<?php echo $sec?>;URL='<?php echo $page?>'">
-    </head>
-    <body>
-    <?php
-        echo "Watch the page reload itself in 10 second!";
-    ?>
-    </body>
-</html>
-<?php
-	require "./config.php";
-	
-	
-		$id='111';
-		$value=rand(0, 9999);
-		if ($second2<=59){
-		    $insert_package="insert into minute (id, value,second) VALUE ('$id','$value','$second2')";  
-		                       if($dbcon->query($insert_package))  
-		                       {  
-		                           echo json_encode(['response'=>'Success']);
-		                       } 
+	require('refresh.php');
+	require('config.php');
+	require ('fun.php');
+	$second=check_second();
+	$id='111';
+	$value=rand(0, 9999);
+	if ($second<=59){
+		insert_second($id,$value,$second);
+	}
+	else{
+		$avg=get_avg();
+		echo "average is $avg";
+		clear_second($id);
+		$minute=check_minute();
+		if ($minute<=59){
+			insert_minute($id,$avg,$minute);
 		}
 		else{
-			$view_users_query="SELECT AVG(value) from minute";//select query for viewing users.  
-			$run=mysqli_query($dbcon,$view_users_query);//here run the sql query.  
-			$second=mysqli_fetch_array($run);
-			echo $second[0];
-			$avg=$second[0];
-			$view_users_query="SELECT minute from hour order by minute desc limit 1";//select query for viewing users.  
-	$run=mysqli_query($dbcon,$view_users_query);//here run the sql query. 
-	$minute2=0; 
-	$minute=mysqli_fetch_array($run);
-	echo $minute[0];
-
-	$minute=$minute[0]+1;
-
-
-
+			$avg=get_avg_minute();
+			echo "average is $avg";
+			clear_minute($id);
+			$hour=check_hour();
+			if ($hour<=23){
+				insert_hour($id,$avg,$hour);
+			}
+			else{
+				$avg=get_avg_hour();
+				
+				clear_hour();
+				//yahan se aage ke function likhne hain
+				$day=check_day();
+				if ($day<=6){
+					insert_day($id,$avg,$day);
+				}
+				else{
+					$avg=get_avg_day();
+					clear_day();
+					update_aqi($id,$avg);
+				}
+			}
 		}
 
-		                       ?>		
+	}
+?>
